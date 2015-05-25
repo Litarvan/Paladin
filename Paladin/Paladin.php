@@ -97,7 +97,7 @@ class Paladin {
       // Creating a twig environment with the Cache folder as the compilation cache
       self::$twig = new \Twig_Environment($loader, array(
           'cache' => 'Paladin/Cache/',
-          'auto_reload' => "$autoreload"
+          'auto_reload' => self::$autoreload
       ));
       
       // Setting registered to true
