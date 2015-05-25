@@ -33,6 +33,14 @@ require_once 'Paladin.php';
 class Page {
 
   /**
+   * Returns the name of the page
+   *
+   * @return The page name
+   */
+  public function getName() {
+  }
+
+  /**
    * Returns the main twig page to be displayed
    *
    * @return The name of the main page
@@ -44,6 +52,12 @@ class Page {
    * Called by the PageLoader before displaying the page
    */
   public function beforeDisplayed() {
+  }
+
+  /**
+   * Returns if the Page is themable
+   */
+  public function isThemable() {
   }
 
   /**

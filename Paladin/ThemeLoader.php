@@ -58,14 +58,30 @@ class ThemeLoader {
    * Loads all themes in the folder
    */
   public function loadThemes() {
+    // Getting the list of files in the theme folder
     $folderList = scandir($this->folder);
+    
+    // For each file
     for ($i = 0; $i < sizeof($folderList); $i++)
+      // If it is a folder, and isn't the current/parent folder
       if(is_dir($folderList[$i]) && $folderList[$i] != "." && $folderList[$i] != "..")
+        // Adding it to the theme list
         $this->themes[$i] = $folderList[$i];
   }
 
   /**
+   * Returns the current theme folder
+   *
+   * @return The current folder
+   */
+  public function getFolder() {
+    return $this->folder;
+  }
+
+  /**
    * Returns the list of all themes
+   *
+   * @return The list of themes
    */
   public function getThemes() {
     return $this->themes;
@@ -73,9 +89,12 @@ class ThemeLoader {
 
   /**
    * Sets a new theme
+   *
+   * @param $theme
+   *            The new theme to set
    */
   public function setCurrentTheme($theme) {
-    $this->currentTheme = $them;
+    $this->currentTheme = $theme;
   }
 
   /**

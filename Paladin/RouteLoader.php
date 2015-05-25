@@ -63,7 +63,7 @@ class RouteLoader {
 	 */
 	public function getCurrentRouteFromURL($url) {
 		// Splitting the URL with /
-		$splittedURL = explode('/', str_replace(dirname($_SERVER['SCRIPT_FILENAME']) . "/", "", $_SERVER['DOCUMENT_ROOT'].substr($_SERVER['REQUEST_URI'], 1)));
+		$splittedURL = explode('/', str_replace(dirname($_SERVER['SCRIPT_FILENAME']) . "/", "", $_SERVER['DOCUMENT_ROOT'].substr($url, 1)));
 
 		// The route name is the first index
 		$route['name'] = $splittedURL[0];

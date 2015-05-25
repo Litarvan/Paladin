@@ -22,6 +22,7 @@
 namespace Paladin;
 
 require_once 'Paladin.php';
+require_once 'Twig/SimpleFunction.php';
 
 /**
  * The Pages system
@@ -52,6 +53,37 @@ class PageLoader {
    */
   public function __construct($folder) {
     $this->folder = $folder;
+  }
+
+  /**
+   * Adds the Twig getResource() function
+   */
+  public function addTwigFunction() {
+    // Creating a twig function 'getResource()'
+    $function = new \Twig_SimpleFunction('getResource', function ($pageName, $resource, $themable) {
+      // Creating the empty resourcePath variable
+      $resourcePath;
+      
+      // Creating the resource relative path
+      $resourceRelativePath = "/" . $pageName . "/resources/" . $resource;
+      
+      // If the page instance is themable and the current theme contains the resource
+      if($themable && file_exists(Paladin::getThemeLoader()->getFolder() . "/" . Paladin::getThemeLoader()->getCurrentTheme() . $resourceRelativePath))
+        // Setting the template path to the theme template path
+        $resourcePath = Paladin::getThemeLoader()->getFolder() . "/" . Paladin::getThemeLoader()->getCurrentTheme() . $resourceRelativePath; 
+      else
+        // Setting the template path to the default path
+        $resourcePath = $this->folder . $resourceRelativePath;
+      
+      // Getting the current route
+      $route = Paladin::getRouteLoader()->getCurrentRoute();
+      
+      // Returning the resource path from the root folder
+      return Paladin::getRootFolder() . $resourcePath;
+    });
+    
+    // Adding the created function
+    Paladin::getTwig()->addFunction($function);
   }
 
   /**
@@ -101,7 +133,7 @@ class PageLoader {
     }
 
     // Rendering the page
-    $this->renderPage($page, $pageInstance, $args);
+    $this->renderPage($pageInstance, $args);
   }
 
   /**
@@ -149,15 +181,23 @@ class PageLoader {
    * @param args
    *           The arguments of the page
    */
-  public function renderPage($page, $pageInstance, $args) {
-    // Loading Twig
-    Paladin::loadTwig();
-
+  public function renderPage($pageInstance, $args) {
     // Sending the 'beforeDisplayed()' event to the page
     $pageInstance->beforeDisplayed();
+    
+    // Creating the template path
+    $templatePath = "/" . $pageInstance->getName() . "/" . $pageInstance->getMainPage();
+    
+    // If the page instance is themable and the current theme contains the page
+    if($pageInstance->isThemable() && file_exists(Paladin::getThemeLoader()->getFolder() . "/" . Paladin::getThemeLoader()->getCurrentTheme() . $templatePath))
+      // Setting the template path to the theme template path
+      $templatePath = Paladin::getThemeLoader()->getFolder() . "/" . Paladin::getThemeLoader()->getCurrentTheme() . $templatePath;
+    else
+      // Setting the template path to the default path
+      $templatePath = $this->folder . $templatePath;
 
     // Rendering the page with Twig
-    echo Paladin::getTwig()->render($page . "/" . $pageInstance->getMainPage(), $pageInstance->constructTwigArray($args));
+    echo Paladin::getTwig()->render($templatePath, $pageInstance->constructTwigArray($args));
 
     // Sending the 'afterDisplayed()' event to the page
     $pageInstance->afterDisplayed();

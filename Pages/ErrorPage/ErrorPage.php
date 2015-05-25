@@ -22,6 +22,7 @@
 namespace Paladin\Pages;
 
 require_once 'Paladin/Page.php';
+require_once 'Paladin/Paladin.php';
 
 /**
  * An error page
@@ -32,8 +33,16 @@ require_once 'Paladin/Page.php';
  */
 class ErrorPage extends \Paladin\Page {
 
+  public function getName() {
+    return "ErrorPage";
+  }
+
   public function getMainPage() {
     return "ErrorPage.php.twig";
+  }
+
+  public function isThemable() {
+    return false;
   }
 
   public function constructTwigArray($args) {
@@ -41,6 +50,10 @@ class ErrorPage extends \Paladin\Page {
       "title" => $args[0],
       "message" => $args[1]
     );
+  }
+
+  public function beforeDisplayed() {
+    \Paladin\Paladin::getThemeLoader()->setCurrentTheme("TestTheme");
   }
 
 }
