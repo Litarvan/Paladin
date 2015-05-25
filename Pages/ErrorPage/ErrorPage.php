@@ -42,7 +42,7 @@ class ErrorPage extends \Paladin\Page {
   }
 
   public function isThemable() {
-    return false;
+    return true;
   }
 
   public function constructTwigArray($args) {
@@ -51,9 +51,5 @@ class ErrorPage extends \Paladin\Page {
       "message" => $args[1]
     );
   }
-
-  public function beforeDisplayed() {
-    \Paladin\Paladin::getThemeLoader()->setCurrentTheme("TestTheme");
-  }
-
+  
 }

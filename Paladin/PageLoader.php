@@ -147,7 +147,7 @@ class PageLoader {
    *           The main page name
    * @return True if it exists, false if not
    */
-  public function checkPage($page, $namespace, $mainPage) {
+  private function checkPage($page, $namespace, $mainPage) {
     // Getting the full path of the page
     $pagePath = $this->folder . "/" . $page . "/" . $mainPage . ".php";
 
@@ -181,7 +181,7 @@ class PageLoader {
    * @param args
    *           The arguments of the page
    */
-  public function renderPage($pageInstance, $args) {
+  private function renderPage($pageInstance, $args) {
     // Sending the 'beforeDisplayed()' event to the page
     $pageInstance->beforeDisplayed();
     
