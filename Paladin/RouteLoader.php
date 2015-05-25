@@ -30,91 +30,91 @@ namespace Paladin;
  */
 class RouteLoader {
 
-	private $folder;
+  private $folder;
 
-	public function __construct($folder) {
-		$this->folder = $folder;
-	}
+  public function __construct($folder) {
+    $this->folder = $folder;
+  }
 
-	/**
-	 * Returns the route of the current URL as an array
-	 *
-	 * With an url like this : http://foo.bar/hi/i/am/an/url
-	 * The name is hi
-	 * And the arguments are i, am, an, and url
-	 *
-	 * @return An array with 'name' as the name of the route and 'args' as another array with the arguments
-	 */
-	public function getCurrentRoute() {
-		// Just returning getCurrentRouteFromURL with the REQUEST_URI field
-		return $this->getCurrentRouteFromURL($_SERVER['REQUEST_URI']);
-	}
+  /**
+   * Returns the route of the current URL as an array
+   *
+   * With an url like this : http://foo.bar/hi/i/am/an/url
+   * The name is hi
+   * And the arguments are i, am, an, and url
+   *
+   * @return An array with 'name' as the name of the route and 'args' as another array with the arguments
+   */
+  public function getCurrentRoute() {
+    // Just returning getCurrentRouteFromURL with the REQUEST_URI field
+    return $this->getCurrentRouteFromURL($_SERVER['REQUEST_URI']);
+  }
 
-	/**
-	 * Returns the route of an URL as an array
-	 *
-	 * With an url like this : http://foo.bar/hi/i/am/an/url
-	 * The name is hi
-	 * And the arguments are i, am, an, and url
-	 *
-	 * @return An array with 'name' as the name of the route and 'args' as another array with the arguments
-	 */
-	public function getCurrentRouteFromURL($url) {
-		// Splitting the URL with /
-		$splittedURL = explode('/', str_replace(dirname($_SERVER['SCRIPT_FILENAME']) . "/", "", $_SERVER['DOCUMENT_ROOT'].substr($url, 1)));
+  /**
+   * Returns the route of an URL as an array
+   *
+   * With an url like this : http://foo.bar/hi/i/am/an/url
+   * The name is hi
+   * And the arguments are i, am, an, and url
+   *
+   * @return An array with 'name' as the name of the route and 'args' as another array with the arguments
+   */
+  public function getCurrentRouteFromURL($url) {
+    // Splitting the URL with /
+    $splittedURL = explode('/', str_replace(dirname($_SERVER['SCRIPT_FILENAME']) . "/", "", $_SERVER['DOCUMENT_ROOT'].substr($url, 1)));
 
-		// The route name is the first index
-		$route['name'] = $splittedURL[0];
+    // The route name is the first index
+    $route['name'] = $splittedURL[0];
 
-		// And adding the others to the args array
-		for ($i = 1; $i < sizeof($splittedURL); $i++)
-			$route['args'][$i - 1] = $splittedURL[$i];
+    // And adding the others to the args array
+    for ($i = 1; $i < sizeof($splittedURL); $i++)
+      $route['args'][$i - 1] = $splittedURL[$i];
 
-		// Returning the created array
-		return $route;
-	}
+    // Returning the created array
+    return $route;
+  }
 
-	/**
-	 * Load route from the current URL
-	 */
-	public function loadRoute() {
-		// Just loading the route from the REQUEST_URI
-		$this->loadRouteFromURL($_SERVER['REQUEST_URI']);
-	}
+  /**
+   * Load route from the current URL
+   */
+  public function loadRoute() {
+    // Just loading the route from the REQUEST_URI
+    $this->loadRouteFromURL($_SERVER['REQUEST_URI']);
+  }
 
-	/**
-	 * Load route from the given URL
-	 */
-	public function loadRouteFromURL($url) {
-		// Getting the route name and arguments for the given URL
-		$route = $this->getCurrentRouteFromURL($url);
+  /**
+   * Load route from the given URL
+   */
+  public function loadRouteFromURL($url) {
+    // Getting the route name and arguments for the given URL
+    $route = $this->getCurrentRouteFromURL($url);
 
-		// If there isn't name
-		if($route['name'] == "")
-			// Setting the folder path as 'index'
-			$routeFolderPath = "../" . $this->folder . "/index/";
+    // If there isn't name
+    if($route['name'] == "")
+      // Setting the folder path as 'index'
+      $routeFolderPath = "../" . $this->folder . "/index/";
 
-		// Else
-		else
-			// Setting the folder path as the route name
-			$routeFolderPath = "../" . $this->folder . "/" . $route['name'];
+    // Else
+    else
+      // Setting the folder path as the route name
+      $routeFolderPath = "../" . $this->folder . "/" . $route['name'];
 
-		// If the route directory doesn't exist
-		if(!file_exists($routeFolderPath)) {
-			// Displaying the 404 page
-			Paladin::getPageLoader()->displayPage("\Paladin\Pages", "ErrorPage", array("404 :(", "Sorry ! The page you requested cannot be found !"));
+    // If the route directory doesn't exist
+    if(!file_exists($routeFolderPath)) {
+      // Displaying the 404 page
+      Paladin::getPageLoader()->displayPage("\Paladin\Pages", "ErrorPage", array("404 :(", "Sorry ! The page you requested cannot be found !"));
 
-			// Stopping the function
-			return;
-		}
+      // Stopping the function
+      return;
+    }
 
-		// Calling the route
-		require $routeFolderPath . $route['name'];
-		$routeClass = new $route['name'];
-		$routeClass->onCalling($route['args']);
-	}
+    // Calling the route
+    require $routeFolderPath . $route['name'];
+    $routeClass = new $route['name'];
+    $routeClass->onCalling($route['args']);
+  }
 
-	/**
+  /**
    * Returns the current route folder
    *
    * @return The current folder

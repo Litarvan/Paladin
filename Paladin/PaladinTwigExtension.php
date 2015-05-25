@@ -29,31 +29,31 @@ namespace Paladin;
  * @version 1.0.0-BETA
  */
 class PaladinTwigExtension extends \Twig_Extension {
-	
-	public function getName() {
-		return "Paladin Twig Extension";
-	}
+  
+  public function getName() {
+    return "Paladin Twig Extension";
+  }
 
-	public function getFunctions() {
-		// Creating the getResource function
-		$getResource = new \Twig_SimpleFunction('getResource', function ($pageName, $resource, $themable) {
+  public function getFunctions() {
+    // Creating the getResource function
+    $getResource = new \Twig_SimpleFunction('getResource', function ($pageName, $resource, $themable) {
       return Paladin::getRootFolder() . self::getFile($pageName, $resource, $themable, "resources");
     });
-		
-		// Creating the add panel function
-		$addPanel = new \Twig_SimpleFunction('addPanel', function ($pageName, $panel, $themable, $args) {
-			echo Paladin::getTwig()->render(self::getFile($pageName, $panel, $themable, "panels"), $args);
-		});
-		
-		// Returning an array of the functions
-		return array(
-			$getResource,
-			$addPanel
-		);
-	}
-	
-	public function getFile($pageName, $file, $themable, $folder) {
-		// Creating the empty resourcePath variable
+    
+    // Creating the add panel function
+    $addPanel = new \Twig_SimpleFunction('addPanel', function ($pageName, $panel, $themable, $args) {
+      echo Paladin::getTwig()->render(self::getFile($pageName, $panel, $themable, "panels"), $args);
+    });
+    
+    // Returning an array of the functions
+    return array(
+      $getResource,
+      $addPanel
+    );
+  }
+  
+  public function getFile($pageName, $file, $themable, $folder) {
+    // Creating the empty resourcePath variable
     $filePath;
     
     // Creating the resource relative path
@@ -72,8 +72,8 @@ class PaladinTwigExtension extends \Twig_Extension {
     
     // Returning the resource path from the root folder
     return $filePath;
-	}
-	
+  }
+  
 }
 
 ?>
