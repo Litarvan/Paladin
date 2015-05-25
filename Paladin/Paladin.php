@@ -21,11 +21,6 @@
 
 namespace Paladin;
 
-require_once 'Twig/Autoloader.php';
-require_once 'RouteLoader.php';
-require_once 'PageLoader.php';
-require_once 'ThemeLoader.php';
-
 /**
  * The Paladin Main Class
  *
@@ -39,11 +34,6 @@ class Paladin {
    * The folder where Paladin was installed
    */
   private static $rootFolder;
-  
-  /**
-   * If the we're registered from the Twig Autoloader
-   */
-  private static $registered = false;
   
   /**
    * The current Twig Environment
@@ -86,23 +76,17 @@ class Paladin {
    * Loads Twig
    */
   public static function loadTwig() {
-    // If we aren't registered
-    if(!self::$registered) {
-      // Registering Paladin to the Twig Autoloader
-      \Twig_Autoloader::register();
-      
-      // Creating a Twig Loader for the current folder
-      $loader = new \Twig_Loader_Filesystem("./");
-      
-      // Creating a twig environment with the Cache folder as the compilation cache
-      self::$twig = new \Twig_Environment($loader, array(
-          'cache' => 'Paladin/Cache/',
-          'auto_reload' => self::$autoreload
-      ));
-      
-      // Setting registered to true
-      self::$registered = true;
-    }
+    // Creating a Twig Loader for the current folder
+    $loader = new \Twig_Loader_Filesystem("./");
+    
+    // Creating a twig environment with the Cache folder as the compilation cache
+    self::$twig = new \Twig_Environment($loader, array(
+        'cache' => 'Paladin/Cache/',
+        'auto_reload' => self::$autoreload
+    ));
+    
+    // Adding it the extension
+    self::$twig->addExtension(new PaladinTwigExtension());
   }
 
   /**
@@ -130,6 +114,11 @@ class Paladin {
    * @return The Twig Environment
    */
   public static function getTwig() {
+    // If Twig isn't initialized
+    if(!isset(self::$twig))
+      // Loading it
+      self::loadTwig();
+      
     return self::$twig;
   }
 
@@ -154,32 +143,17 @@ class Paladin {
     if($fatal)
       die();
   }
-
+  
   /**
-   * Display a page
+   * Returns the current page loader (and creates it if it doesn't exist)
    *
-   * @param $namespace
-   *            The namespace of the page class
-   * @param $page
-   *            The page folder relative path
-   * @param $args
-   *            The arguments to give to the constructTwigArray method of the page
+   * @return The page loader
    */
-  public static function loadPage($namespace, $page, $args) {
-    // If the page loader isn't created
-    if(!isset(self::$pageLoader)) {
-      // Creating it
+  public static function getPageLoader() {
+    if(!isset(self::$pageLoader))
       self::$pageLoader = new PageLoader("Pages");
-      
-      // Loading it
-      Paladin::loadTwig();
-      
-      // Adding the twig function
-      self::$pageLoader->addTwigFunction();
-    }
 
-    // Displaying the page
-    self::$pageLoader->displayPage($namespace, $page, $args);
+    return self::$pageLoader;
   }
   
   /**

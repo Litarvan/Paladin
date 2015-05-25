@@ -21,9 +21,6 @@
 
 namespace Paladin;
 
-require_once 'Paladin.php';
-require_once 'Twig/SimpleFunction.php';
-
 /**
  * The Pages system
  *
@@ -53,37 +50,6 @@ class PageLoader {
    */
   public function __construct($folder) {
     $this->folder = $folder;
-  }
-
-  /**
-   * Adds the Twig getResource() function
-   */
-  public function addTwigFunction() {
-    // Creating a twig function 'getResource()'
-    $function = new \Twig_SimpleFunction('getResource', function ($pageName, $resource, $themable) {
-      // Creating the empty resourcePath variable
-      $resourcePath;
-      
-      // Creating the resource relative path
-      $resourceRelativePath = "/" . $pageName . "/resources/" . $resource;
-      
-      // If the page instance is themable and the current theme contains the resource
-      if($themable && file_exists(Paladin::getThemeLoader()->getFolder() . "/" . Paladin::getThemeLoader()->getCurrentTheme() . $resourceRelativePath))
-        // Setting the template path to the theme template path
-        $resourcePath = Paladin::getThemeLoader()->getFolder() . "/" . Paladin::getThemeLoader()->getCurrentTheme() . $resourceRelativePath; 
-      else
-        // Setting the template path to the default path
-        $resourcePath = $this->folder . $resourceRelativePath;
-      
-      // Getting the current route
-      $route = Paladin::getRouteLoader()->getCurrentRoute();
-      
-      // Returning the resource path from the root folder
-      return Paladin::getRootFolder() . $resourcePath;
-    });
-    
-    // Adding the created function
-    Paladin::getTwig()->addFunction($function);
   }
 
   /**
@@ -121,7 +87,7 @@ class PageLoader {
       // If the page isn't the error page
       if(!($page == "ErrorPage" && $namespace == "\Paladin\Pages"))
         // Displaying an error page
-        Paladin::loadPage("\Paladin\Pages", "ErrorPage", array("Page PHP dev error", "Sorry ! The website developper made a mistake !</br>The page " . $pagePath . " need to extends Paladin\Page."));
+        self::displayPage("\Paladin\Pages", "ErrorPage", array("Page PHP dev error", "Sorry ! The website developper made a mistake !</br>The page " . $pagePath . " need to extends Paladin\Page."));
 
       // Else if it's the error page
       else
@@ -156,7 +122,7 @@ class PageLoader {
       // If the page isn't the error page
       if(!($page == "ErrorPage" && $namespace == "\Paladin\Pages"))
         // Displaying an error page
-        Paladin::loadPage("\Paladin\Pages", "ErrorPage", array("Page mistake", "Sorry ! You tried to display a page but we can't find its main class (" . $pagePath . ") !"));
+        self::displayPage("\Paladin\Pages", "ErrorPage", array("Page mistake", "Sorry ! You tried to display a page but we can't find its main class (" . $pagePath . ") !"));
 
       // Else if it's the error page
       else
@@ -201,6 +167,15 @@ class PageLoader {
 
     // Sending the 'afterDisplayed()' event to the page
     $pageInstance->afterDisplayed();
+  }
+
+  /**
+   * Returns the current page folder
+   *
+   * @return The current folder
+   */
+  public function getFolder() {
+    return $this->folder;
   }
 
 }

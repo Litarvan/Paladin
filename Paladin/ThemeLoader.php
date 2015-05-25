@@ -21,8 +21,6 @@
 
 namespace Paladin;
 
-require_once 'Paladin.php';
-
 /**
  * The Theme loader
  *

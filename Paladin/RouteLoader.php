@@ -21,8 +21,6 @@
 
 namespace Paladin;
 
-require_once "Paladin.php";
-
 /**
  * The Routes system
  *
@@ -104,7 +102,7 @@ class RouteLoader {
 		// If the route directory doesn't exist
 		if(!file_exists($routeFolderPath)) {
 			// Displaying the 404 page
-			Paladin::loadPage("\Paladin\Pages", "ErrorPage", array("404 :(", "Sorry ! The page you requested cannot be found !"));
+			Paladin::getPageLoader()->displayPage("\Paladin\Pages", "ErrorPage", array("404 :(", "Sorry ! The page you requested cannot be found !"));
 
 			// Stopping the function
 			return;
@@ -115,6 +113,15 @@ class RouteLoader {
 		$routeClass = new $route['name'];
 		$routeClass->onCalling($route['args']);
 	}
+
+	/**
+   * Returns the current route folder
+   *
+   * @return The current folder
+   */
+  public function getFolder() {
+    return $this->folder;
+  }
 
 }
 

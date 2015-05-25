@@ -19,7 +19,15 @@
 * along with Paladin.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require 'Paladin/Paladin.php';
+// Loading Paladin
+require 'vendor/autoload.php';
+require 'Paladin/Page.php';
+require 'Paladin/PageLoader.php';
+require 'Paladin/Paladin.php'; 
+require 'Paladin/PaladinTwigExtension.php';
+require 'Paladin/Route.php';
+require 'Paladin/RouteLoader.php';
+require 'Paladin/ThemeLoader.php';
 
 // Load the route for the current URL
 Paladin\Paladin::getRouteLoader()->loadRoute();
