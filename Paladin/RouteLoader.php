@@ -69,6 +69,10 @@ class RouteLoader {
     // And adding the others to the args array
     for ($i = 1; $i < sizeof($splittedURL); $i++)
       $route['args'][$i - 1] = $splittedURL[$i];
+      
+    // Adding a blank args array if there aren't arguments
+    if(!isset($route['args']))
+      $route['args'] = array();
 
     // Returning the created array
     return $route;
@@ -91,13 +95,11 @@ class RouteLoader {
 
     // If there isn't name
     if($route['name'] == "")
-      // Setting the route path as 'index'
-      $routePath = $this->folder . "/Index.php";
-
-    // Else
-    else
-      // Setting the folder path as the route name
-      $routePath = $this->folder . "/" . $route['name'] . ".php";
+      // Setting the route name as 'index'
+      $route['name'] = "Index";
+      
+    // Getting the route path
+    $routePath = $this->folder . "/" . $route['name'] . ".php";
     
     // If the route directory doesn't exist
     if(!file_exists($routePath)) {
