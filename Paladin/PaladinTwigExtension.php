@@ -22,7 +22,7 @@
 namespace Paladin;
 
 /**
- * The Routes system
+ * The Paladin Twig Extension
  *
  * @author TheShark34
  * @package Paladin
@@ -40,7 +40,7 @@ class PaladinTwigExtension extends \Twig_Extension {
       return Paladin::getRootFolder() . self::getFile($pageName, $resource, $themable, "resources");
     });
     
-    // Creating the add panel function
+    // Creating the addPanel function
     $addPanel = new \Twig_SimpleFunction('addPanel', function ($pageName, $panel, $themable, $args) {
       echo Paladin::getTwig()->render(self::getFile($pageName, $panel, $themable, "panels"), $args);
     });

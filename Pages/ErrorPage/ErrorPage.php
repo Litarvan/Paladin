@@ -21,9 +21,6 @@
 
 namespace Paladin\Pages;
 
-require_once 'Paladin/Page.php';
-require_once 'Paladin/Paladin.php';
-
 /**
  * An error page
  *
