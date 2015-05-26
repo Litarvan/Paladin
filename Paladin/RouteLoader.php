@@ -91,25 +91,25 @@ class RouteLoader {
 
     // If there isn't name
     if($route['name'] == "")
-      // Setting the folder path as 'index'
-      $routeFolderPath = "../" . $this->folder . "/index/";
+      // Setting the route path as 'index'
+      $routePath = $this->folder . "/Index.php";
 
     // Else
     else
       // Setting the folder path as the route name
-      $routeFolderPath = "../" . $this->folder . "/" . $route['name'];
-
+      $routePath = $this->folder . "/" . $route['name'] . ".php";
+    
     // If the route directory doesn't exist
-    if(!file_exists($routeFolderPath)) {
+    if(!file_exists($routePath)) {
       // Displaying the 404 page
       Paladin::getPageLoader()->displayPage("\Paladin\Pages", "ErrorPage", array("404 :(", "Sorry ! The page you requested cannot be found !"));
-
+      
       // Stopping the function
       return;
     }
 
     // Calling the route
-    require $routeFolderPath . $route['name'];
+    require $routePath;
     $routeClass = new $route['name'];
     $routeClass->onCalling($route['args']);
   }
