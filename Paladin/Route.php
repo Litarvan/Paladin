@@ -37,7 +37,7 @@ abstract class Route {
    *            The arguments of the route, every things (excepted the route name and the website url) of the url separated by /
    *            By exemple for this url : http://foo.bar/this/is/a/url The route name would be this, and the arguments 'is', 'a', and 'url'
    */
-  protected abstract function onCalling($args);
+  public abstract function onCalling($args);
 
 }
 ?>
